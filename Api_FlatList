@@ -1,12 +1,11 @@
 import React,{Component} from 'react';
-import { Text, View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import UserItem from "./Api_FlatList_SubComponent/UserItem";
-import {FlatList} from "react-native-web";
+import { Text,FlatList, View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import UserItem from "./Api/UserItem";
 
 const USERS_URL = 'https://randomuser.me/api?results=30'
 
 
-export default class Api_FlatList extends Component{
+export default class ApiFlatList extends Component{
 
     state = {
         users: null,
@@ -44,6 +43,12 @@ export default class Api_FlatList extends Component{
     render() {
         const { isLoading, users, error } = this.state;
         const firstUser = users ? users[0] : null;
+
+
+        const renderUsers = ({item}) =>(
+            <UserItem user={item}/>
+        )
+
         return (
             <View style={styles.container}>
                 {isLoading && <ActivityIndicator />}
@@ -54,10 +59,12 @@ export default class Api_FlatList extends Component{
                 )}
                 {users && (
                     <Text style={styles.paragraph}>Number of users: {users.length}</Text>
-                    /*Her indsætter vi vores liste af brugere der bliver hentet med endpointet (hint brug din sidste flat liste*/
-                
+
                 )}
                 {error && <Text style={styles.error}>Error: {error}</Text>}
+                
+                {/*Her indsætter vi vores liste af brugere der bliver hentet med endpointet (hint brug din sidste flat liste*/}
+               
             </View>
         );
     }
@@ -65,13 +72,16 @@ export default class Api_FlatList extends Component{
 
 const styles = StyleSheet.create({
     container: {
+        width:'100%',
         flex: 1,
         justifyContent: 'center',
         backgroundColor: '#ecf0f1',
         padding: 8,
     },
+    inlineScroll:{
+        height: 100
+    },
     paragraph: {
-        margin: 24,
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'center',
