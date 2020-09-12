@@ -1,0 +1,79 @@
+import React,{Component} from 'react';
+import { Text, View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+
+
+const USERS_URL = 'https://randomuser.me/api?results=3'
+
+
+export default class Api_FlatList extends Component{
+
+    state = {
+        users: null,
+        isLoading: false,
+        error: null,
+    };
+
+    componentDidMount = () => {
+        this.loadUserProfiles();
+    };
+
+    startLoading = () => this.setState({ isLoading: true });
+
+    stopLoading = () => this.setState({ isLoading: false });
+
+    setError = message => this.setState({ error: message });
+
+    clearError = () => this.setState({ error: null });
+
+    loadUserProfiles = async () => {
+        try {
+            this.startLoading();
+            const response = await fetch(USERS_URL);
+            const json = await response.json();
+            console.log('json response from network', json);
+            this.setState({ users: json.results });
+            this.stopLoading();
+            this.clearError();
+        } catch (error) {
+            this.stopLoading();
+            this.setError(error.message);
+        }
+    };
+
+    render() {
+        const { isLoading, users, error } = this.state;
+        const firstUser = users ? users[0] : null;
+        return (
+            <View style={styles.container}>
+                {isLoading && <ActivityIndicator />}
+                {firstUser && (
+                    <Text style={styles.paragraph}>
+                        First user: {firstUser.name.first} {firstUser.name.last}
+                    </Text>
+                )}
+                {users && (
+                    <Text style={styles.paragraph}>Number of users: {users.length}</Text>
+                )}
+                {error && <Text style={styles.error}>Error: {error}</Text>}
+            </View>
+        );
+    }
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        backgroundColor: '#ecf0f1',
+        padding: 8,
+    },
+    paragraph: {
+        margin: 24,
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    error: {
+        color:'red'
+    },
+});
