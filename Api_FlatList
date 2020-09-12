@@ -1,8 +1,9 @@
 import React,{Component} from 'react';
 import { Text, View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import UserItem from "./Api_FlatList_SubComponent/UserItem";
+import {FlatList} from "react-native-web";
 
-
-const USERS_URL = 'https://randomuser.me/api?results=3'
+const USERS_URL = 'https://randomuser.me/api?results=30'
 
 
 export default class Api_FlatList extends Component{
@@ -53,6 +54,8 @@ export default class Api_FlatList extends Component{
                 )}
                 {users && (
                     <Text style={styles.paragraph}>Number of users: {users.length}</Text>
+                    /*Her indsætter vi vores liste af brugere der bliver hentet med endpointet (hint brug din sidste flat liste*/
+                
                 )}
                 {error && <Text style={styles.error}>Error: {error}</Text>}
             </View>
